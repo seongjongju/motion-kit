@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MotionKit Demo</title>
+<link rel="stylesheet" href="motion-kit.css">
+<style>
+  :root { --bg:#111; --panel:#1a1a1a; --panel2:#222; --line:#2a2a2a; --text:#eee; --muted:#999; --accent:#7cf; --code:#fc8; }
+  * { box-sizing: border-box; }
+  html, body { overflow-x: hidden; }
+  body { margin: 0; font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); }
+  section { min-height: 80vh; padding: 80px 8vw; border-bottom: 1px solid var(--line); }
+  h1 { font-size: clamp(36px, 7vw, 72px); margin: 0 0 12px; }
+  h2 { margin: 0 0 8px; color: var(--accent); }
+  p.desc { margin: 0 0 28px; color: var(--muted); }
+  code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; background: var(--panel2); padding: 2px 6px; border-radius: 4px; color: var(--code); font-size: .92em; }
+  .card { display: inline-block; padding: 24px 28px; margin: 8px; background: var(--panel2); border-radius: 12px; }
+  .btn { padding: 14px 22px; border: 0; border-radius: 10px; background: var(--accent); color: #012; font-weight: 700; cursor: pointer; margin: 8px; }
+  .big { font-size: 56px; font-weight: 800; margin: 12px 32px 12px 0; display: inline-block; }
+  .list { display: grid; gap: 12px; max-width: 480px; }
+  .list > div { background: var(--panel2); padding: 16px; border-radius: 10px; }
+  .demo-box { min-width: 0; }
+
+  /* index.html의 코드 블록/복사 버튼 스타일 재사용 */
+  pre { margin: 0; overflow: auto; }
+  pre code { display: block; padding: 16px 18px; background: transparent; color: #d7d7d7; font-size: 13px; line-height: 1.6; }
+  .code-block { position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; margin: 12px 0 22px; }
+  .code-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 12px 8px 16px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+  .code-head .actions { display: flex; flex: 0 0 auto; gap: 8px; }
+  .copy-btn, .toggle-btn { padding: 6px 11px; font-size: 12px; border-radius: 7px; border: 1px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer; }
+  .tok-punc { color: #888; }
+  .tok-tag { color: var(--accent); }
+  .tok-attr { color: var(--code); }
+  .tok-str { color: #a8d98c; }
+  .tok-com { color: #6a9955; font-style: italic; }
+  @media (prefers-reduced-motion: reduce) { .copy-btn, .toggle-btn { transition: none; } }
+</style>
+</head>
+<body>
+
+<section>
+  <div class="demo-box" data-snippet>
+    <h1 class="ani-fade-up">MotionKit</h1>
+    <p class="ani-fade-up desc" data-ani-delay="0.2">
+      class만 붙이면 끝 — <code>class="ani-fade-up"</code>
+    </p>
+    <p class="ani-fade desc" data-ani-delay="0.5">↓ 스크롤해서 확인해보세요</p>
+  </div>
+</section>
+
+<section>
+  <h2>입장 모션 (스크롤 진입 시)</h2>
+  <p class="desc">fade-up / fade-left / fade-right / zoom-in / zoom-out / blur / rotate / flip</p>
+  <div class="demo-box" data-snippet>
+    <div class="card ani-fade-up">fade-up</div>
+    <div class="card ani-fade-left" data-ani-delay="0.1">fade-left</div>
+    <div class="card ani-fade-right" data-ani-delay="0.2">fade-right</div>
+    <div class="card ani-zoom-in" data-ani-delay="0.3">zoom-in</div>
+    <div class="card ani-zoom-out" data-ani-delay="0.4">zoom-out</div>
+    <div class="card ani-blur" data-ani-delay="0.5">blur</div>
+    <div class="card ani-rotate" data-ani-delay="0.6">rotate</div>
+    <div class="card ani-flip" data-ani-delay="0.7">flip</div>
+  </div>
+</section>
+
+<section>
+  <h2>텍스트 쪼개기</h2>
+  <p class="desc"><code>ani-split-chars</code> / <code>ani-split-words</code></p>
+  <div class="demo-box" data-snippet>
+    <h1 class="ani-split-chars">글자가 하나씩 올라와요</h1>
+    <h1 class="ani-split-words" data-ani-child="fade-down">단어가 순서대로 내려와요</h1>
+  </div>
+</section>
+
+<section>
+  <h2>스태거 (자식 순차 등장)</h2>
+  <p class="desc"><code>ani-stagger</code> + <code>data-ani-child="fade-left"</code></p>
+  <div class="demo-box" data-snippet>
+    <div class="list ani-stagger" data-ani-child="fade-left">
+      <div>첫 번째 항목</div>
+      <div>두 번째 항목</div>
+      <div>세 번째 항목</div>
+      <div>네 번째 항목</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>숫자 카운트</h2>
+  <p class="desc"><code>ani-count</code> + <code>data-ani-to</code></p>
+  <div class="demo-box" data-snippet>
+    <span class="big ani-count" data-ani-to="1250" data-ani-suffix="+">0</span>
+    <span class="big ani-count" data-ani-to="98.5" data-ani-decimals="1" data-ani-suffix="%">0</span>
+    <span class="big ani-count" data-ani-to="30000" data-ani-prefix="₩">0</span>
+  </div>
+</section>
+
+<section>
+  <h2>호버</h2>
+  <p class="desc"><code>ani-hover-lift</code> / <code>ani-hover-scale</code> / <code>ani-hover-rotate</code></p>
+  <div class="demo-box" data-snippet>
+    <div class="card ani-hover-lift">lift</div>
+    <div class="card ani-hover-scale">scale</div>
+    <div class="card ani-hover-rotate">rotate</div>
+  </div>
+</section>
+
+<section>
+  <h2>클릭</h2>
+  <p class="desc"><code>ani-click-pulse</code> / <code>ani-click-shake</code> / <code>ani-burst</code> (mo.js)</p>
+  <div class="demo-box" data-snippet>
+    <button class="btn ani-click-pulse">pulse</button>
+    <button class="btn ani-click-shake">shake</button>
+    <button id="burst-default" class="btn ani-burst">burst 🎉</button>
+    <button class="btn ani-burst" data-ani-burst-shape="line" data-ani-burst-count="14" data-ani-burst-radius="110">line burst</button>
+  </div>
+</section>
+
+<section>
+  <h2>그룹 (자식이 각자 모션)</h2>
+  <p class="desc"><code>ani-group</code> + 자식의 <code>ani-fade-left</code> / <code>ani-zoom-in</code> / <code>ani-flip</code></p>
+  <div class="demo-box" data-snippet>
+    <div class="list ani-group" data-ani-stagger="0.12" data-ani-delay="0.1">
+      <div class="ani-fade-left">왼쪽에서</div>
+      <div class="ani-zoom-in">확대되며</div>
+      <div class="ani-flip">뒤집히며</div>
+      <div class="ani-group" data-ani-stagger="0.08">
+        <div class="ani-fade-right">중첩 1</div>
+        <div class="ani-blur">중첩 2</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>반복 옵션</h2>
+  <p class="desc"><code>data-ani-repeat="once|reverse|replay"</code> (reverse/replay는 ScrollTrigger 필요)</p>
+  <div class="demo-box" data-snippet>
+    <div class="card ani-fade-up" data-ani-repeat="once">once</div>
+    <div class="card ani-fade-left" data-ani-repeat="reverse">reverse</div>
+    <div class="card ani-zoom-in" data-ani-repeat="replay">replay</div>
+  </div>
+</section>
+
+<section>
+  <h2>반응형 옵션</h2>
+  <p class="desc"><code>data-ani-mobile="fade-up"</code> / <code>data-ani-mobile="off"</code> / <code>data-ani-tablet="off"</code></p>
+  <div class="demo-box" data-snippet>
+    <div id="resp-swap" class="card ani-fade-left" data-ani-mobile="fade-up">모바일 fade-up</div>
+    <div id="resp-off-mobile" class="card ani-fade-down" data-ani-mobile="off">모바일 off</div>
+    <div id="resp-off-tablet" class="card ani-fade-right" data-ani-tablet="off">태블릿 off</div>
+    <div id="resp-scaled" class="card ani-fade-up">모바일 거리 0.6배</div>
+  </div>
+</section>
+
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mojs/core@1.7.1"></script>
+<script>
+/* motion-kit.js보다 먼저 실행해 원본 마크업을 보관한다. (이후엔 split-chars·인라인 style로 변형됨) */
+(function () {
+  'use strict';
+  var areas = document.querySelectorAll('[data-snippet]');
+  var originals = [];
+  var i;
+  for (i = 0; i < areas.length; i++) originals.push(areas[i].innerHTML);
+
+  function pad(d) { return new Array(d + 1).join('  '); }
+  function escText(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function escAttr(s) { return escText(s).replace(/"/g, '&quot;'); }
+
+  function trimKids(host) {
+    var kids = [];
+    for (var n = 0; n < host.childNodes.length; n++) {
+      if (host.childNodes[n].nodeType === 1) kids.push(host.childNodes[n]);
+    }
+    if (kids.length <= 3) return kids;
+    for (var k = 3; k < kids.length; k++) host.removeChild(kids[k]);
+    host.appendChild(document.createComment(' ... '));
+    return kids.slice(0, 3);
+  }
+
+  function clean(node) {
+    if (node.nodeType !== 1) return;
+    var cls = node.getAttribute('class');
+    if (cls) {
+      var keep = [];
+      var parts = cls.split(/\s+/);
+      for (var a = 0; a < parts.length; a++) if (parts[a].indexOf('ani-') === 0) keep.push(parts[a]);
+      if (keep.length) node.setAttribute('class', keep.join(' '));
+      else node.removeAttribute('class');
+    }
+    node.removeAttribute('style');
+    var kids = trimKids(node);
+    for (var b = 0; b < kids.length; b++) clean(kids[b]);
+  }
+
+  function serialize(node, depth) {
+    if (node.nodeType === 8) return pad(depth) + '<!--' + node.data + '-->';
+    if (node.nodeType !== 1) {
+      var t = node.nodeValue.replace(/\s+/g, ' ').trim();
+      return t ? pad(depth) + escText(t) : '';
+    }
+    var tag = node.tagName.toLowerCase();
+    var attrs = [];
+    for (var a = 0; a < node.attributes.length; a++) {
+      attrs.push(node.attributes[a].name + '="' + escAttr(node.attributes[a].value) + '"');
+    }
+    var open = '<' + tag + (attrs.length ? ' ' + attrs.join(' ') : '') + '>';
+    var kids = [];
+    for (var b = 0; b < node.childNodes.length; b++) {
+      if (node.childNodes[b].nodeType === 1) kids.push(node.childNodes[b]);
+    }
+    if (!kids.length) {
+      var text = node.textContent.replace(/\s+/g, ' ').trim();
+      return pad(depth) + open + (text ? escText(text) : '') + '</' + tag + '>';
+    }
+    var lines = [pad(depth) + open];
+    for (var c = 0; c < node.childNodes.length; c++) {
+      var line = serialize(node.childNodes[c], depth + 1);
+      if (line) lines.push(line);
+    }
+    lines.push(pad(depth) + '</' + tag + '>');
+    return lines.join('\n');
+  }
+
+  function snippet(html) {
+    var box = document.createElement('div');
+    box.innerHTML = html;
+    var kids = trimKids(box);
+    for (var i = 0; i < kids.length; i++) clean(kids[i]);
+    var lines = [];
+    for (var j = 0; j < box.childNodes.length; j++) {
+      var line = serialize(box.childNodes[j], 0);
+      if (line) lines.push(line);
+    }
+    return lines.join('\n');
+  }
+
+  function span(cls, text) {
+    var s = document.createElement('span');
+    s.className = cls;
+    s.textContent = text;
+    return s;
+  }
+
+  function colorTag(tag, host) {
+    if (tag.indexOf('<!--') === 0) { host.appendChild(span('tok-com', tag)); return; }
+    host.appendChild(span('tok-punc', '<'));
+    var inner = tag.slice(1, tag.length - 1);
+    var m = /^(\/?)([a-zA-Z][a-zA-Z0-9-]*)/.exec(inner);
+    if (m) {
+      if (m[1]) host.appendChild(span('tok-punc', m[1]));
+      host.appendChild(span('tok-tag', m[2]));
+      inner = inner.slice(m[0].length);
+    }
+    var re = /(\s+)([a-zA-Z-]+)(\s*=\s*)?("[^"]*"|'[^']*')?/g;
+    var last = 0;
+    var a;
+    while ((a = re.exec(inner))) {
+      if (a.index > last) host.appendChild(document.createTextNode(inner.slice(last, a.index)));
+      host.appendChild(document.createTextNode(a[1]));
+      host.appendChild(span('tok-attr', a[2]));
+      if (a[3]) host.appendChild(span('tok-punc', a[3]));
+      if (a[4]) host.appendChild(span('tok-str', a[4]));
+      last = re.lastIndex;
+    }
+    if (last < inner.length) host.appendChild(document.createTextNode(inner.slice(last)));
+    host.appendChild(span('tok-punc', tag.charAt(tag.length - 1) === '/' ? '/>' : '>'));
+  }
+
+  function colorize(code, host) {
+    var i = 0;
+    while (i < code.length) {
+      if (code.charAt(i) === '<') {
+        var end;
+        if (code.slice(i, i + 4) === '<!--') {
+          end = code.indexOf('-->', i);
+          end = end < 0 ? code.length - 1 : end + 2;
+        } else {
+          end = code.indexOf('>', i);
+          if (end < 0) end = code.length - 1;
+        }
+        colorTag(code.slice(i, end + 1), host);
+        i = end + 1;
+      } else {
+        var next = code.indexOf('<', i);
+        if (next < 0) next = code.length;
+        host.appendChild(document.createTextNode(code.slice(i, next)));
+        i = next;
+      }
+    }
+  }
+
+  function addBlock(area, code) {
+    var block = document.createElement('div');
+    block.className = 'code-block';
+    var head = document.createElement('div');
+    head.className = 'code-head';
+    var title = document.createElement('span');
+    title.textContent = '사용한 HTML 구조';
+    var actions = document.createElement('span');
+    actions.className = 'actions';
+    var copy = document.createElement('button');
+    copy.type = 'button';
+    copy.className = 'copy-btn';
+    copy.textContent = '복사';
+    var toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'toggle-btn';
+    toggle.textContent = '접기';
+    actions.appendChild(copy);
+    actions.appendChild(toggle);
+    head.appendChild(title);
+    head.appendChild(actions);
+    var pre = document.createElement('pre');
+    var codeEl = document.createElement('code');
+    colorize(code, codeEl);
+    pre.appendChild(codeEl);
+    block.appendChild(head);
+    block.appendChild(pre);
+    area.parentNode.insertBefore(block, area.nextSibling);
+  }
+
+  for (i = 0; i < areas.length; i++) addBlock(areas[i], snippet(originals[i]));
+
+  function legacyCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  document.addEventListener('click', function (e) {
+    var t = e.target;
+    if (!t || !t.closest) return;
+    var copy = t.closest('.copy-btn');
+    if (copy) {
+      var text = copy.closest('.code-block').querySelector('code').textContent;
+      function done(ok) {
+        copy.textContent = ok ? '복사됨' : '복사 실패';
+        window.setTimeout(function () { copy.textContent = '복사'; }, 1400);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(legacyCopy(text)); });
+      } else done(legacyCopy(text));
+      return;
+    }
+    var toggle = t.closest('.toggle-btn');
+    if (toggle) {
+      var pre = toggle.closest('.code-block').querySelector('pre');
+      pre.hidden = !pre.hidden;
+      toggle.textContent = pre.hidden ? '보기' : '접기';
+    }
+  });
+})();
+</script>
+<script src="motion-kit.js"></script>
+</body>
+</html>

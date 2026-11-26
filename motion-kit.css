@@ -1,0 +1,39 @@
+/*!
+ * MotionKit v1.0 — 초기 상태 CSS
+ * <head>에서 불러오세요. (모션 시작 전 요소가 보였다 사라지는 깜빡임 방지)
+ * JS가 꺼져 있으면(scripting: none) 숨기지 않으므로 콘텐츠가 그대로 보입니다.
+ */
+@media (scripting: enabled) {
+  /* ani-ready가 붙은 뒤에만 숨긴다. JS 미로드(404/CSP) 시에는 아무 것도 숨기지 않는다. */
+  html.ani-ready .ani-fade,
+  html.ani-ready .ani-fade-up,
+  html.ani-ready .ani-fade-down,
+  html.ani-ready .ani-fade-left,
+  html.ani-ready .ani-fade-right,
+  html.ani-ready .ani-zoom-in,
+  html.ani-ready .ani-zoom-out,
+  html.ani-ready .ani-blur,
+  html.ani-ready .ani-rotate,
+  html.ani-ready .ani-flip {
+    opacity: 0;
+  }
+
+  html.ani-ready .ani-split-chars,
+  html.ani-ready .ani-split-words {
+    visibility: hidden;
+  }
+
+  html.ani-ready .ani-stagger > *,
+  html.ani-ready .ani-group > * {
+    opacity: 0;
+  }
+}
+
+/* gsap 로드 실패 시 motion-kit.js가 html에 ani-fail을 붙여 전부 다시 보이게 함 */
+.ani-fail [class*="ani-"],
+.ani-fail .ani-stagger > * {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* will-change는 JS가 애니메이션 시작/종료 시 inline으로 붙이고 제거한다. */
